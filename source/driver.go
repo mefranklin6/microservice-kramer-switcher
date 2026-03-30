@@ -664,10 +664,12 @@ func getVideoInputStatus(socketKey string, input string) (string, error) {
 }
 
 func healthCheck(socketKey string) (string, error) {
-	_, err := getModel(socketKey)
+	resp, err := getModel(socketKey)
 	returnStr := "true"
-	if err != nil && strings.Contains(err.Error(), "error sending #MODEL command") {
+	if err != nil {
 		returnStr = "false"
+	} else {
+		returnStr = returnStr + " model: " + strings.Trim(resp, `"`)
 	}
 	return `"` + returnStr + `"`, nil
 }
